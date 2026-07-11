@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalog electronic studenți</title>
+<style>
+  :root{
+    --bg:#eef0f2;
+    --navy:#1c2e4a;
+    --magenta:#b5407a;
+    --btn:#4f7396;
+    --btn-hover:#436383;
+    --header-blue:#4a83bc;
+    --row-alt:#f7f8fa;
+    --border:#e2e5e9;
+    --text-muted:#6b7280;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Segoe UI", Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--navy);
+    min-height:100vh;
+  }
+  .screen{
+    display:none;
+    max-width:640px;
+    margin:0 auto;
+    padding:36px 24px 60px;
+  }
+  .screen.active{display:block;}
+
+  /* ---------- PAGE 1 : LANDING ---------- */
+  h1.title{
+    text-align:center;
+    font-size:2rem;
+    font-weight:800;
+    margin:10px 0 34px;
+  }
+  .intro{
+    text-align:center;
+    font-size:1.05rem;
+    line-height:1.5;
+    margin-bottom:30px;
+  }
+  .highlight{
+    color:var(--magenta);
+    font-weight:700;
+    text-align:center;
+    font-size:1.05rem;
+    line-height:1.5;
+  }
+  .highlight .navy-inline{color:var(--navy);}
+  .notice{
+    font-size:1.05rem;
+    line-height:1.5;
+    margin-top:18px;
+  }
+  .notice b{color:var(--navy);}
+  .btn-wrap{
+    display:flex;
+    justify-content:center;
+    margin-top:44px;
+  }
+  .pill-btn{
+    background:var(--btn);
+    color:#fff;
+    border:none;
+    padding:16px 40px;
+    border-radius:30px;
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .pill-btn:hover{background:var(--btn-hover);}
+
+  /* ---------- PAGE LOGIN ---------- */
+  .login-box{
+    max-width:420px;
+    margin:60px auto 0;
+    background:#fff;
+    border-radius:14px;
+    padding:36px 30px;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  .login-box h2{
+    text-align:center;
+    margin-top:0;
+    margin-bottom:24px;
+    color:var(--navy);
+  }
+  .field{
+    margin-bottom:18px;
+  }
+  .field label{
+    display:block;
+    font-size:.85rem;
+    font-weight:600;
+    color:var(--text-muted);
+    margin-bottom:6px;
+  }
+  .field input{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:1rem;
+    color:var(--navy);
+  }
+  .field input:focus{
+    outline:2px solid var(--btn);
+    border-color:var(--btn);
+  }
+  .error-msg{
+    color:#c0392b;
+    font-size:.9rem;
+    margin-bottom:14px;
+    min-height:1.1em;
+    text-align:center;
+  }
+  .login-actions{
+    display:flex;
+    justify-content:center;
+    margin-top:8px;
+  }
+  .back-link{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:var(--btn);
+    font-size:.9rem;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* ---------- PAGE GRADES ---------- */
+  .grades-screen{max-width:760px;}
+  h1.page-title{
+    text-align:center;
+    font-size:2.1rem;
+    font-weight:500;
+    margin:6px 0 26px;
+  }
+  .student-line{
+    font-size:1rem;
+    margin-bottom:18px;
+  }
+  .table-wrap{
+    padding:0 6px;
+    margin-bottom:34px;
+    overflow-x:auto;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    font-size:.95rem;
+  }
+  thead th{
+    background:var(--row-alt);
+    color:var(--text-muted);
+    font-weight:700;
+    text-align:center;
+    padding:14px 10px;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{
+    text-align:center;
+    padding:16px 10px;
+    border-bottom:1px solid var(--border);
+    color:var(--navy);
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  .disc-col{text-align:left;}
+
+  .taxa-header{
+    background:var(--header-blue);
+    color:#fff;
+    font-weight:700;
+    font-size:1.05rem;
+    padding:14px 16px;
+    border-radius:6px 6px 0 0;
+  }
+  .taxa-table{border-radius:0 0 6px 6px; overflow:hidden;}
+  .taxa-table table{border:1px solid var(--border); border-top:none;}
+
+  .year-tabs{
+    display:flex;
+    gap:10px;
+    margin:0 6px 24px;
+  }
+  .year-tab{
+    flex:1;
+    padding:12px 0;
+    text-align:center;
+    border:2px solid var(--header-blue);
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    color:var(--header-blue);
+    background:#fff;
+    transition:all .15s ease;
+  }
+  .year-tab.active{
+    background:var(--header-blue);
+    color:#fff;
+  }
+
+  .section-title{
+    font-size:1.6rem;
+    font-weight:800;
+    color:var(--navy);
+    margin:36px 6px 16px;
+  }
+  .info-card{
+    background:#fff;
+    border-radius:14px;
+    padding:6px 20px;
+    box-shadow:0 1px 4px rgba(0,0,0,.05);
+    margin:0 6px;
+  }
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 6px;
+    border-bottom:1px solid var(--border);
+  }
+  .info-row:last-child{border-bottom:none;}
+  .info-label{
+    color:var(--text-muted);
+    font-weight:700;
+  }
+  .info-value{
+    color:var(--navy);
+  }
+
+  .logout-wrap{
+    display:flex;
+    justify-content:center;
+    margin-top:20px;
+  }
+  .logout-btn{
+    background:transparent;
+    color:var(--btn);
+    border:1px solid var(--btn);
+    padding:10px 26px;
+    border-radius:24px;
+    font-size:.9rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .logout-btn:hover{background:var(--btn);color:#fff;}
+
+  @media (max-width:480px){
+    h1.title{font-size:1.6rem;}
+    .login-box{margin:30px 16px 0; padding:26px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= SCREEN 1: LANDING ================= -->
+<div id="screen-landing" class="screen active">
+  <h1 class="title">Catalog electronic studenți</h1>
+
+  <p class="intro">
+    Universitatea "Alexandru Ioan Cuza" din Iași permite vizualizarea situației
+    școlare prin intermediul catalogului electronic.
+  </p>
+
+  <p class="highlight">
+    Conectarea studenților se face prin intermediul contului instituțional de
+    forma <span class="navy-inline">prenume.nume</span> <i>(Office 365)</i>.
+  </p>
+
+  <div class="notice">
+    <p><b>ATENȚIE!</b> Sistemul nu este actualizat în timp real, de către
+      secretariate. Pot exista întârzieri între afișarea notelor și apariția
+      lor în catalogul online.</p>
+    <p><b>ATENȚIE!</b> Studenții care întâmpină probleme legate de note (note
+      greșite, lipsa notelor etc.) se vor adresa secretariatului facultății.</p>
+  </div>
+
+  <div class="btn-wrap">
+    <button class="pill-btn" onclick="showScreen('screen-login')">Acces catalog</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 2: LOGIN ================= -->
+<div id="screen-login" class="screen">
+  <div class="login-box">
+    <h2>Autentificare</h2>
+    <div class="field">
+      <label for="cnp">CNP</label>
+      <input type="text" id="cnp" placeholder="Introduceți CNP-ul">
+    </div>
+    <div class="field">
+      <label for="pass">Parolă</label>
+      <input type="password" id="pass" placeholder="Introduceți parola">
+    </div>
+    <div class="error-msg" id="login-error"></div>
+    <div class="login-actions">
+      <button class="pill-btn" onclick="tryLogin()">Autentificare</button>
+    </div>
+    <span class="back-link" onclick="showScreen('screen-landing')">&larr; Înapoi</span>
+  </div>
+</div>
+
+<!-- ================= SCREEN 3: GRADES ================= -->
+<div id="screen-grades" class="screen grades-screen">
+  <h1 class="page-title">Notele mele</h1>
+  <p class="student-line">Dragos-Andrei DINU — Matricol: 310910401RSL231073</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Semestru</th>
+          <th>Medie aritmetică</th>
+          <th>Medie ECTS</th>
+          <th>Puncte</th>
+          <th>Credite</th>
+        </tr>
+      </thead>
+      <tbody id="notele-body">
+        <!-- filled by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="year-tabs">
+    <div class="year-tab active" data-year="1" onclick="selectYear(1)">Anul 1</div>
+    <div class="year-tab" data-year="2" onclick="selectYear(2)">Anul 2</div>
+    <div class="year-tab" data-year="3" onclick="selectYear(3)">Anul 3</div>
+  </div>
+
+  <div class="taxa-table">
+    <div class="taxa-header">Semestrul 1 — TAXA</div>
+    <div class="table-wrap" style="margin-bottom:0;">
+      <table>
+        <thead>
+          <tr>
+            <th class="disc-col">Disciplina</th>
+            <th>Forma notă</th>
+            <th>Nota</th>
+            <th>Credite</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody id="sem1-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="height:26px;"></div>
+
+  <div class="taxa-table">
+    <div class="taxa-header">Semestrul 2 — TAXA</div>
+    <div class="table-wrap" style="margin-bottom:0;">
+      <table>
+        <thead>
+          <tr>
+            <th class="disc-col">Disciplina</th>
+            <th>Forma notă</th>
+            <th>Nota</th>
+            <th>Credite</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody id="sem2-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Date personale</h2>
+  <div class="info-card" id="date-personale-card"></div>
+
+  <h2 class="section-title">Obligații de plată</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>An universitar</th>
+          <th>Semestru</th>
+          <th>Denumire taxă</th>
+          <th>Suma</th>
+          <th>Plătit</th>
+          <th>Scadență</th>
+        </tr>
+      </thead>
+      <tbody id="obligatii-body"></tbody>
+    </table>
+  </div>
+
+  <div class="logout-wrap">
+    <button class="logout-btn" onclick="logout()">Deconectare</button>
+  </div>
+</div>
+
+<script>
+  /* ---------------- MOCK DATA (all strings, easy to edit) ---------------- */
+
+  const CORRECT_CNP = "310910401RSL231073";
+  const CORRECT_PASS = "Parolă112";
+
+  // "Notele mele" summary table — rows 1-4 from source, rows 5-6 left blank for you to fill in.
+  const notele = [
+    { semestru: "1", medieAritmetica: "",     medieEcts: "",     puncte: "182", credite: "25" },
+    { semestru: "2", medieAritmetica: "6.00", medieEcts: "5.83", puncte: "175", credite: "30" },
+    { semestru: "3", medieAritmetica: "",     medieEcts: "",     puncte: "60",  credite: "8"  },
+    { semestru: "4", medieAritmetica: "6.66", medieEcts: "6.43", puncte: "193", credite: "30" },
+    { semestru: "5", medieAritmetica: "",     medieEcts: "",     puncte: "",    credite: "" },
+    { semestru: "6", medieAritmetica: "",     medieEcts: "",     puncte: "",    credite: "" }
+  ];
+
+  // Per-year TAXA data. Each year has semestru1 and semestru2 arrays.
+  // Only "Anul 1" is filled in with real data from the reference images —
+  // edit the "2" and "3" entries below whenever you have that data.
+  const taxaData = {
+    "1": {
+      semestru1: [
+        { disciplina: "Arhitectura calculatoarelor și sisteme de operare", forma: "Normală",  nota: "7.00",  credite: "5", data: "31.01.2025" },
+        { disciplina: "Educație fizică",                                    forma: "Normală",  nota: "10.00", credite: "1", data: "23.01.2025" },
+        { disciplina: "Etică și integritate academică",                     forma: "Restanță", nota: "9.00",  credite: "2", data: "19.01.2026" },
+        { disciplina: "Introducere în programare",                          forma: "Normală",  nota: "5.00",  credite: "4", data: "20.01.2025" },
+        { disciplina: "Limba engleză I",                                    forma: "Normală",  nota: "9.00",  credite: "3", data: "20.01.2025" },
+        { disciplina: "Logică pentru informatică",                          forma: "Normală",  nota: "8.00",  credite: "5", data: "23.01.2025" },
+        { disciplina: "Matematică - Calcul diferențial și integral",        forma: "Normală",  nota: "Abs",   credite: "5", data: "21.01.2025" },
+        { disciplina: "Structuri de date",                                  forma: "Restanță", nota: "7.00",  credite: "6", data: "18.02.2025" }
+      ],
+      semestru2: [
+        { disciplina: "Educație fizică",                       forma: "Normală",  nota: "10.00", credite: "1", data: "10.06.2025" },
+        { disciplina: "Fundamente algebrice ale informaticii",  forma: "Restanță", nota: "5.00",  credite: "5", data: "22.06.2026" },
+        { disciplina: "Limba engleză II",                       forma: "Normală",  nota: "8.00",  credite: "3", data: "09.06.2025" },
+        { disciplina: "Probabilități și statistică",            forma: "Normală",  nota: "5.00",  credite: "6", data: "09.06.2025" },
+        { disciplina: "Programare orientată-obiect",            forma: "Restanță", nota: "6.00",  credite: "6", data: "22.06.2026" },
+        { disciplina: "Proiectarea algoritmilor",                forma: "Restanță", nota: "6.00",  credite: "5", data: "01.07.2025" },
+        { disciplina: "Sisteme de operare",                      forma: "Normală",  nota: "6.00",  credite: "5", data: "23.06.2025" }
+      ]
+    },
+    "2": {
+      semestru1: [
+        { disciplina: "?", forma: "?", nota: "?", credite: "?", data: "?" }
+      ],
+      semestru2: [
+        { disciplina: "?", forma: "?", nota: "?", credite: "?", data: "?" }
+      ]
+    },
+    "3": {
+      semestru1: [
+        { disciplina: "?", forma: "?", nota: "?", credite: "?", data: "?" }
+      ],
+      semestru2: [
+        { disciplina: "?", forma: "?", nota: "?", credite: "?", data: "?" }
+      ]
+    }
+  };
+
+  // "Date personale" info card
+  const datePersonale = [
+    { label: "Email",         value: "" },
+    { label: "Telefon",       value: "0727819678" },
+    { label: "Data nașterii", value: "30/01/2004" },
+    { label: "Mama",          value: "MARIA-MAGDALENA" },
+    { label: "Tata",          value: "RAREȘ-COSTEL" },
+    { label: "Naționalitate", value: "Română" },
+    { label: "Cetățenie",     value: "Română" }
+  ];
+
+  // "Obligații de plată" table
+  const obligatiiPlata = [
+    { an: "2025", semestru: "1", denumire: "licenta, sem.1", suma: "1800.00", platit: "1800.00", scadenta: "09/01/2026" },
+    { an: "2025", semestru: "1", denumire: "licenta, sem.1", suma: "420.00",  platit: "420.00",  scadenta: "09/01/2026" },
+    { an: "2025", semestru: "2", denumire: "licenta, sem.2", suma: "660.00",  platit: "660.00",  scadenta: "22/05/2026" },
+    { an: "2025", semestru: "2", denumire: "licenta, sem.2", suma: "1800.00", platit: "1800.00", scadenta: "22/05/2026" },
+    { an: "2024", semestru: "0", denumire: "anuala",         suma: "200.00",  platit: "200.00",  scadenta: "30/09/2024" },
+    { an: "2024", semestru: "1", denumire: "licenta, sem.1", suma: "1380.00", platit: "1380.00", scadenta: "10/01/2025" },
+    { an: "2024", semestru: "2", denumire: "licenta, sem.2", suma: "960.00",  platit: "960.00",  scadenta: "23/05/2025" },
+    { an: "2023", semestru: "0", denumire: "licenta",        suma: "400.00",  platit: "400.00",  scadenta: "02/10/2023" },
+    { an: "2023", semestru: "1", denumire: "licenta, sem.1", suma: "1800.00", platit: "1800.00", scadenta: "15/01/2024" },
+    { an: "2023", semestru: "2", denumire: "licenta, sem.2", suma: "1800.00", platit: "1800.00", scadenta: "15/05/2024" }
+  ];
+
+  /* ---------------- NAVIGATION ---------------- */
+
+  function showScreen(id){
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  function tryLogin(){
+    const cnp = document.getElementById("cnp").value.trim();
+    const pass = document.getElementById("pass").value;
+    const errEl = document.getElementById("login-error");
+
+    if (cnp === CORRECT_CNP && pass === CORRECT_PASS){
+      errEl.textContent = "";
+      buildNotele();
+      buildDatePersonale();
+      buildObligatii();
+      selectYear(1);
+      showScreen("screen-grades");
+    } else {
+      errEl.textContent = "CNP sau parolă incorectă.";
+    }
+  }
+
+  function logout(){
+    document.getElementById("cnp").value = "";
+    document.getElementById("pass").value = "";
+    document.getElementById("login-error").textContent = "";
+    showScreen("screen-landing");
+  }
+
+  /* ---------------- TABLE BUILDERS ---------------- */
+
+  function buildNotele(){
+    const body = document.getElementById("notele-body");
+    body.innerHTML = "";
+    notele.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.semestru}</td>
+        <td>${row.medieAritmetica}</td>
+        <td>${row.medieEcts}</td>
+        <td>${row.puncte}</td>
+        <td>${row.credite}</td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  function buildTaxaTable(bodyId, rows){
+    const body = document.getElementById(bodyId);
+    body.innerHTML = "";
+    rows.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="disc-col">${row.disciplina}</td>
+        <td>${row.forma}</td>
+        <td>${row.nota}</td>
+        <td>${row.credite}</td>
+        <td>${row.data}</td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  function buildDatePersonale(){
+    const card = document.getElementById("date-personale-card");
+    card.innerHTML = "";
+    datePersonale.forEach(row => {
+      const div = document.createElement("div");
+      div.className = "info-row";
+      div.innerHTML = `
+        <span class="info-label">${row.label}</span>
+        <span class="info-value">${row.value}</span>
+      `;
+      card.appendChild(div);
+    });
+  }
+
+  function buildObligatii(){
+    const body = document.getElementById("obligatii-body");
+    body.innerHTML = "";
+    obligatiiPlata.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.an}</td>
+        <td>${row.semestru}</td>
+        <td>${row.denumire}</td>
+        <td>${row.suma}</td>
+        <td>${row.platit}</td>
+        <td>${row.scadenta}</td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  function selectYear(year){
+    document.querySelectorAll(".year-tab").forEach(tab => {
+      tab.classList.toggle("active", tab.dataset.year === String(year));
+    });
+    const data = taxaData[String(year)];
+    buildTaxaTable("sem1-body", data.semestru1);
+    buildTaxaTable("sem2-body", data.semestru2);
+  }
+</script>
+
+</body>
+</html>
